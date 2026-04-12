@@ -22,6 +22,23 @@
 - 支持 Free/Pro 和 Business/Enterprise 两种订阅格式
 - 显示 Chat、Completions、Premium 配额
 
+### 监控中心
+- 实时请求日志（虚拟滚动，支持大数据量）
+- KPI 卡片：请求数、Token 用量、成功率、平均延迟
+- 按小时/按天的模型分布图、Token 用量图、趋势图
+- 渠道统计与失败分析
+- 支持禁用指定渠道模型
+- 时间范围筛选（1h / 6h / 24h / 7d / 30d / 自定义）
+
+### Kiro OAuth 完整登录
+- AWS Builder ID 登录（适合个人开发者）
+- AWS Identity Center (IDC) 登录（适合企业用户）
+- refreshToken 直接导入（从 Kiro IDE 获取）
+
+### GitHub Copilot OAuth 登录
+- 设备代码流程认证
+- 支持显示 Device Code 并一键复制
+
 ## 📥 如何使用
 
 在你的 **CLI Proxy API Plus** 配置文件中修改：

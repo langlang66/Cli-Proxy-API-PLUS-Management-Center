@@ -11,11 +11,12 @@ export type OAuthProvider =
   | 'gemini-cli'
   | 'kimi'
   | 'qwen'
-  | 'kiro';
+  | 'github-copilot';
 
 export interface OAuthStartResponse {
   url: string;
   state?: string;
+  user_code?: string;
 }
 
 export interface OAuthCallbackResponse {
@@ -31,9 +32,10 @@ export interface IFlowCookieAuthResponse {
   type?: string;
 }
 
-const WEBUI_SUPPORTED: OAuthProvider[] = ['codex', 'anthropic', 'antigravity', 'gemini-cli'];
+const WEBUI_SUPPORTED: OAuthProvider[] = ['codex', 'anthropic', 'antigravity', 'gemini-cli', 'github-copilot'];
 const CALLBACK_PROVIDER_MAP: Partial<Record<OAuthProvider, string>> = {
-  'gemini-cli': 'gemini'
+  'gemini-cli': 'gemini',
+  'github-copilot': 'github'
 };
 
 export const oauthApi = {
@@ -45,7 +47,9 @@ export const oauthApi = {
     if (provider === 'gemini-cli' && options?.projectId) {
       params.project_id = options.projectId;
     }
-    return apiClient.get<OAuthStartResponse>(`/${provider}-auth-url`, {
+    // github-copilot maps to github endpoint
+    const endpointProvider = provider === 'github-copilot' ? 'github' : provider;
+    return apiClient.get<OAuthStartResponse>(`/${endpointProvider}-auth-url`, {
       params: Object.keys(params).length ? params : undefined
     });
   },
