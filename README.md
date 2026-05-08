@@ -1,170 +1,187 @@
-# CLI Proxy API Management Center (Enhanced Fork)
+# CLI Proxy API 管理中心 (增强版 Fork)
 
-[![Sync Upstream](https://github.com/rapeseed-comern/Cli-Proxy-API-Management-Center/actions/workflows/sync-upstream.yml/badge.svg)](https://github.com/rapeseed-comern/Cli-Proxy-API-Management-Center/actions/workflows/sync-upstream.yml)
+[![同步上游](https://github.com/rapeseed-comern/Cli-Proxy-API-Management-Center/actions/workflows/sync-upstream.yml/badge.svg)](https://github.com/rapeseed-comern/Cli-Proxy-API-Management-Center/actions/workflows/sync-upstream.yml)
 
-[中文文档](README_CN.md)
+[English](README.md)
 
-## 🎯 What is this repository?
+## 🎯 这个仓库是什么？
 
-This is an **enhanced fork** of [router-for-me/Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center) with additional features.
+这是 [router-for-me/Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center) 的**增强版 Fork**，添加了额外功能。
 
-## ✨ Enhanced Features
+## ✨ 增强功能
 
-### Kiro (AWS CodeWhisperer) Quota Display
-- View Kiro quota information on the Quota Management page
-- Support quota refresh on Auth Files page
-- Display base quota and active free trial quota (expired trials are hidden)
-- Reset time formatted as M/D HH:MM
+### Kiro (AWS CodeWhisperer) 配额显示
+- 在配额管理页面查看 Kiro 配额信息
+- 认证文件页面支持配额刷新
+- 显示基础配额和激活状态的免费试用配额（已过期的试用配额会被隐藏）
+- 重置时间格式化为 M/D HH:MM
 
-### GitHub Copilot Quota Display
-- View Copilot quota information on the Quota Management page
-- Support quota refresh on Auth Files page
-- Support both Free/Pro and Business/Enterprise subscription formats
-- Display Chat, Completions, and Premium quotas
+### GitHub Copilot 配额显示
+- 在配额管理页面查看 Copilot 配额信息
+- 认证文件页面支持配额刷新
+- 支持 Free/Pro 和 Business/Enterprise 两种订阅格式
+- 显示 Chat、Completions、Premium 配额
 
-## 📥 How to Use
+### 监控中心
+- 实时请求日志（虚拟滚动，支持大数据量）
+- KPI 卡片：请求数、Token 用量、成功率、平均延迟
+- 按小时/按天的模型分布图、Token 用量图、趋势图
+- 渠道统计与失败分析
+- 支持禁用指定渠道模型
+- 时间范围筛选（1h / 6h / 24h / 7d / 30d / 自定义）
 
-Modify in your **CLI Proxy API Plus** config file:
+### Kiro OAuth 完整登录
+- AWS Builder ID 登录（适合个人开发者）
+- AWS Identity Center (IDC) 登录（适合企业用户）
+- refreshToken 直接导入（从 Kiro IDE 获取）
+
+### GitHub Copilot OAuth 登录
+- 设备代码流程认证
+- 支持显示 Device Code 并一键复制
+
+## 📥 如何使用
+
+在你的 **CLI Proxy API Plus** 配置文件中修改：
 
 ```yaml
-panel-github-repository: https://github.com/erik6293/Cli-Proxy-API-PLUS-Management
+panel-github-repository: https://github.com/langlang66/Cli-Proxy-API-PLUS-Management-Center
 ```
 
-The panel will be automatically downloaded and updated.
+面板会自动下载并更新。
 
 ---
 
-## 📖 Original README
+## 📖 原始 README
 
-> The following content is from the upstream project.
+> 以下内容来自上游项目。
 
 ---
 
-# CLI Proxy API Management Center
+# CLI Proxy API 管理中心
 
-A single-file WebUI (React + TypeScript) for operating and troubleshooting the **CLI Proxy API** via its **Management API** (config, credentials, logs, and usage).
+用于管理与排障 **CLI Proxy API** 的单文件 WebUI（React + TypeScript），通过 **Management API** 完成配置、凭据、日志与统计等运维工作。
 
-**Main Project**: https://github.com/router-for-me/CLIProxyAPI
-**Example URL**: https://remote.router-for.me/
-**Minimum Required Version**: ≥ 6.3.0 (recommended ≥ 6.5.0)
+**主项目**: https://github.com/router-for-me/CLIProxyAPI
+**示例地址**: https://remote.router-for.me/
+**最低版本要求**: ≥ 6.3.0（推荐 ≥ 6.5.0）
 
-Since version 6.0.19, the WebUI ships with the main program; access it via `/management.html` on the API port once the service is running.
+自 6.0.19 版本起，WebUI 已内置于主程序；服务启动后通过 API 端口访问 `/management.html` 即可使用。
 
-## What this is (and isn't)
+## 这是什么（以及不是什么）
 
-- This repository is the WebUI only. It talks to the CLI Proxy API **Management API** (`/v0/management`) to read/update config, upload credentials, view logs, and inspect usage.
-- It is **not** a proxy and does not forward traffic.
+- 本仓库只包含 Web 管理界面本身，通过 CLI Proxy API 的 **Management API**（`/v0/management`）读取/修改配置、上传凭据、查看日志与使用统计。
+- 它 **不是** 代理本体，不参与流量转发。
 
-## Quick start
+## 快速开始
 
-### Option A: Use the WebUI bundled in CLIProxyAPI (recommended)
+### 方式 A：使用 CLIProxyAPI 自带的 WebUI（推荐）
 
-1. Start your CLI Proxy API service.
-2. Open: `http://<host>:<api_port>/management.html`
-3. Enter your **management key** and connect.
+1. 启动 CLI Proxy API 服务。
+2. 打开：`http://<host>:<api_port>/management.html`
+3. 输入 **管理密钥** 并连接。
 
-The address is auto-detected from the current page URL; manual override is supported.
+页面会根据当前地址自动推断 API 地址，也支持手动修改。
 
-### Option B: Run the dev server
+### 方式 B：开发调试
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`, then connect to your CLI Proxy API instance.
+打开 `http://localhost:5173`，然后连接到你的 CLI Proxy API 实例。
 
-### Option C: Build a single HTML file
+### 方式 C：构建单文件 HTML
 
 ```bash
 npm install
 npm run build
 ```
 
-- Output: `dist/index.html` (all assets are inlined).
-- For CLIProxyAPI bundling, the release workflow renames it to `management.html`.
-- To preview locally: `npm run preview`
+- 构建产物：`dist/index.html`（资源已全部内联）。
+- 在 CLIProxyAPI 的发布流程里会重命名为 `management.html`。
+- 本地预览：`npm run preview`
 
-Tip: opening `dist/index.html` via `file://` may be blocked by browser CORS; serving it (preview/static server) is more reliable.
+提示：直接用 `file://` 打开 `dist/index.html` 可能遇到浏览器 CORS 限制；更稳妥的方式是用预览/静态服务器打开。
 
-## Connecting to the server
+## 连接说明
 
-### API address
+### API 地址怎么填
 
-You can enter any of the following; the UI will normalize it:
+以下格式均可，WebUI 会自动归一化：
 
 - `localhost:8317`
 - `http://192.168.1.10:8317`
 - `https://example.com:8317`
-- `http://example.com:8317/v0/management` (also accepted; the suffix is removed internally)
+- `http://example.com:8317/v0/management`（也可填写，后缀会被自动去除）
 
-### Management key (not the same as API keys)
+### 管理密钥（注意：不是 API Keys）
 
-The management key is sent with every request as:
+管理密钥会以如下方式随请求发送：
 
-- `Authorization: Bearer <MANAGEMENT_KEY>` (default)
+- `Authorization: Bearer <MANAGEMENT_KEY>`（默认）
 
-This is different from the proxy `api-keys` you manage inside the UI (those are for client requests to the proxy endpoints).
+这与 WebUI 中"API Keys"页面管理的 `api-keys` 不同：后者是代理对外接口（如 OpenAI 兼容接口）给客户端使用的鉴权 key。
 
-### Remote management
+### 远程管理
 
-If you connect from a non-localhost browser, the server must allow remote management (e.g. `allow-remote-management: true`).
-See `api.md` for the full authentication rules, server-side limits, and edge cases.
+当你从非 localhost 的浏览器访问时，服务端通常需要开启远程管理（例如 `allow-remote-management: true`）。
+完整鉴权规则、限制与边界情况请查看 `api.md`。
 
-## What you can manage (mapped to the UI pages)
+## 功能一览（按页面对应）
 
-- **Dashboard**: connection status, server version/build date, quick counts, model availability snapshot.
-- **Basic Settings**: debug, proxy URL, request retry, quota fallback (switch project/preview models), usage statistics, request logging, file logging, WebSocket auth.
-- **API Keys**: manage proxy `api-keys` (add/edit/delete).
-- **AI Providers**:
-  - Gemini/Codex/Claude key entries (base URL, headers, proxy, model aliases, excluded models, prefix).
-  - OpenAI-compatible providers (multiple API keys, custom headers, model alias import via `/v1/models`, optional browser-side "chat/completions" test).
-  - Ampcode integration (upstream URL/key, force mappings, model mapping table).
-- **Auth Files**: upload/download/delete JSON credentials, filter/search/pagination, runtime-only indicators, view supported models per credential (when the server supports it), manage OAuth excluded models (supports `*` wildcards).
-- **OAuth**: start OAuth/device flows for supported providers, poll status, optionally submit callback `redirect_url`; includes iFlow cookie import.
-- **Usage**: requests/tokens charts (hour/day), per-API & per-model breakdown, cached/reasoning token breakdown, RPM/TPM window, optional cost estimation with locally-saved model pricing.
-- **Config**: edit `/config.yaml` in-browser with YAML highlighting + search, then save/reload.
-- **Logs**: tail logs with incremental polling, auto-refresh, search, hide management traffic, clear logs; download request error log files.
-- **System**: quick links + fetch `/v1/models` (grouped view). Requires at least one proxy API key to query models.
+- **仪表盘**：连接状态、服务版本/构建时间、关键数量概览、可用模型概览。
+- **基础设置**：调试开关、代理 URL、请求重试、配额回退（切项目/切预览模型）、使用统计、请求日志、文件日志、WebSocket 鉴权。
+- **API Keys**：管理代理 `api-keys`（增/改/删）。
+- **AI 提供商**：
+  - Gemini/Codex/Claude 配置（Base URL、Headers、代理、模型别名、排除模型、Prefix）。
+  - OpenAI 兼容提供商（多 Key、Header、自助从 `/v1/models` 拉取并导入模型别名、可选浏览器侧 `chat/completions` 测试）。
+  - Ampcode 集成（上游地址/密钥、强制映射、模型映射表）。
+- **认证文件**：上传/下载/删除 JSON 凭据，筛选/搜索/分页，标记 runtime-only；查看单个凭据可用模型（依赖后端支持）；管理 OAuth 排除模型（支持 `*` 通配符）。
+- **OAuth**：对支持的提供商发起 OAuth/设备码流程，轮询状态；可选提交回调 `redirect_url`；包含 iFlow Cookie 导入。
+- **使用统计**：按小时/天图表、按 API 与按模型统计、缓存/推理 Token 拆分、RPM/TPM 时间窗、可选本地保存的模型价格用于费用估算。
+- **配置文件**：浏览器内编辑 `/config.yaml`（YAML 高亮 + 搜索），保存/重载。
+- **日志**：增量拉取日志、自动刷新、搜索、隐藏管理端流量、清空日志；下载请求错误日志文件。
+- **系统信息**：快捷链接 + 拉取 `/v1/models` 并分组展示（需要至少一个代理 API Key 才能查询模型）。
 
-## Build & release notes
+## 构建与发布说明
 
-- Vite produces a **single HTML** output (`dist/index.html`) with all assets inlined (via `vite-plugin-singlefile`).
-- Tagging `vX.Y.Z` triggers `.github/workflows/release.yml` to publish `dist/management.html`.
-- The UI version shown in the footer is injected at build time (env `VERSION`, git tag, or `package.json` fallback).
+- 使用 Vite 输出 **单文件 HTML**（`dist/index.html`），资源全部内联（`vite-plugin-singlefile`）。
+- 打 `vX.Y.Z` 标签会触发 `.github/workflows/release.yml`，发布 `dist/management.html`。
+- 页脚显示的 UI 版本在构建期注入（优先使用环境变量 `VERSION`，否则使用 git tag / `package.json`）。
 
-## Security notes
+## 安全提示
 
-- The management key is stored in browser `localStorage` using a lightweight obfuscation format (`enc::v1::...`) to avoid plaintext storage; treat it as sensitive.
-- Use a dedicated browser profile/device for management. Be cautious when enabling remote management and evaluate its exposure surface.
+- 管理密钥会存入浏览器 `localStorage`，并使用轻量混淆格式（`enc::v1::...`）避免明文；仍应视为敏感信息。
+- 建议使用独立浏览器配置/设备进行管理；开启远程管理时请谨慎评估暴露面。
 
-## Troubleshooting
+## 常见问题
 
-- **Can't connect / 401**: confirm the API address and management key; remote access may require enabling remote management in the server config.
-- **Repeated auth failures**: the server may temporarily block remote IPs.
-- **Logs page missing**: enable "Logging to file" in Basic Settings; the navigation item is shown only when file logging is enabled.
-- **Some features show "unsupported"**: the backend may be too old or the endpoint is disabled/absent (common for model lists per auth file, excluded models, logs).
-- **OpenAI provider test fails**: the test runs in the browser and depends on network/CORS of the provider endpoint; a failure here does not always mean the server cannot reach it.
+- **无法连接 / 401**：确认 API 地址与管理密钥；远程访问可能需要服务端开启远程管理。
+- **反复输错密钥**：服务端可能对远程 IP 进行临时封禁。
+- **日志页面不显示**：需要在"基础设置"里开启"写入日志文件"，导航项才会出现。
+- **功能提示不支持**：多为后端版本较旧或接口未启用/不存在（如：认证文件模型列表、排除模型、日志相关接口）。
+- **OpenAI 提供商测试失败**：测试在浏览器侧执行，会受网络与 CORS 影响；这里失败不一定代表服务端不可用。
 
-## Development
+## 开发命令
 
 ```bash
-npm run dev        # Vite dev server
-npm run build      # tsc + Vite build
-npm run preview    # serve dist locally
-npm run lint       # ESLint (fails on warnings)
+npm run dev        # 启动开发服务器
+npm run build      # tsc + Vite 构建
+npm run preview    # 本地预览 dist
+npm run lint       # ESLint（warnings 视为失败）
 npm run format     # Prettier
 npm run type-check # tsc --noEmit
 ```
 
-## Contributing
+## 贡献
 
-Issues and PRs are welcome. Please include:
+欢迎提 Issue 与 PR。建议附上：
 
-- Reproduction steps (server version + UI version)
-- Screenshots for UI changes
-- Verification notes (`npm run lint`, `npm run type-check`)
+- 复现步骤（服务端版本 + UI 版本）
+- UI 改动截图
+- 验证记录（`npm run lint`、`npm run type-check`）
 
-## License
+## 许可证
 
 MIT
