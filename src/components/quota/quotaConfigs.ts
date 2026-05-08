@@ -1436,22 +1436,23 @@ const fetchKiroQuota = async (
       baseQuota = { used, limit, resetTime };
     }
 
-    const freeTrialInfo = usageBreakdown.freeTrialInfo;
-    if (freeTrialInfo) {
-      const trialLimit = normalizeNumberValue(freeTrialInfo.usageLimitWithPrecision);
-      const trialUsed = normalizeNumberValue(freeTrialInfo.currentUsageWithPrecision);
-      const trialExpiry = normalizeNumberValue(freeTrialInfo.freeTrialExpiry);
-      const trialStatus = normalizeStringValue(freeTrialInfo.freeTrialStatus);
+    // 隐藏免费试用配额显示
+    // const freeTrialInfo = usageBreakdown.freeTrialInfo;
+    // if (freeTrialInfo) {
+    //   const trialLimit = normalizeNumberValue(freeTrialInfo.usageLimitWithPrecision);
+    //   const trialUsed = normalizeNumberValue(freeTrialInfo.currentUsageWithPrecision);
+    //   const trialExpiry = normalizeNumberValue(freeTrialInfo.freeTrialExpiry);
+    //   const trialStatus = normalizeStringValue(freeTrialInfo.freeTrialStatus);
 
-      if (trialLimit !== null && trialUsed !== null && trialExpiry !== null && trialStatus) {
-        freeTrialQuota = {
-          used: trialUsed,
-          limit: trialLimit,
-          expiry: trialExpiry,
-          status: trialStatus,
-        };
-      }
-    }
+    //   if (trialLimit !== null && trialUsed !== null && trialExpiry !== null && trialStatus) {
+    //     freeTrialQuota = {
+    //       used: trialUsed,
+    //       limit: trialLimit,
+    //       expiry: trialExpiry,
+    //       status: trialStatus,
+    //     };
+    //   }
+    // }
   }
 
   return { subscriptionTitle, baseQuota, freeTrialQuota };
@@ -1508,42 +1509,43 @@ const renderKiroItems = (
     );
   }
 
-  if (quota.freeTrialQuota) {
-    const { used, limit, expiry, status } = quota.freeTrialQuota;
-    const remaining = Math.max(0, limit - used);
-    const percent = limit > 0 ? Math.round((remaining / limit) * 100) : 0;
-    const isActive = status.toUpperCase() === 'ACTIVE';
-    const statusLabel = isActive ? t('kiro_quota.trial_active') : t('kiro_quota.trial_expired');
-    const expiryLabel = formatKiroResetTime(expiry);
+  // 隐藏免费试用配额显示
+  // if (quota.freeTrialQuota) {
+  //   const { used, limit, expiry, status } = quota.freeTrialQuota;
+  //   const remaining = Math.max(0, limit - used);
+  //   const percent = limit > 0 ? Math.round((remaining / limit) * 100) : 0;
+  //   const isActive = status.toUpperCase() === 'ACTIVE';
+  //   const statusLabel = isActive ? t('kiro_quota.trial_active') : t('kiro_quota.trial_expired');
+  //   const expiryLabel = formatKiroResetTime(expiry);
 
-    nodes.push(
-      h(
-        'div',
-        { key: 'trial', className: styleMap.quotaRow },
-        h(
-          'div',
-          { className: styleMap.quotaRowHeader },
-          h(
-            'span',
-            { className: styleMap.quotaModel },
-            `${t('kiro_quota.free_trial')} (${statusLabel})`
-          ),
-          h(
-            'div',
-            { className: styleMap.quotaMeta },
-            h('span', { className: styleMap.quotaPercent }, `${percent}%`),
-            h('span', { className: styleMap.quotaAmount }, `${remaining.toFixed(1)}/${limit}`),
-            h('span', { className: styleMap.quotaReset }, expiryLabel)
-          )
-        ),
-        h(QuotaProgressBar, {
-          percent,
-          highThreshold: QUOTA_PROGRESS_HIGH_THRESHOLD,
-          mediumThreshold: QUOTA_PROGRESS_MEDIUM_THRESHOLD,
-        })
-      )
-    );
-  }
+  //   nodes.push(
+  //     h(
+  //       'div',
+  //       { key: 'trial', className: styleMap.quotaRow },
+  //       h(
+  //         'div',
+  //         { className: styleMap.quotaRowHeader },
+  //         h(
+  //           'span',
+  //           { className: styleMap.quotaModel },
+  //           `${t('kiro_quota.free_trial')} (${statusLabel})`
+  //         ),
+  //         h(
+  //           'div',
+  //           { className: styleMap.quotaMeta },
+  //           h('span', { className: styleMap.quotaPercent }, `${percent}%`),
+  //           h('span', { className: styleMap.quotaAmount }, `${remaining.toFixed(1)}/${limit}`),
+  //           h('span', { className: styleMap.quotaReset }, expiryLabel)
+  //         )
+  //       ),
+  //       h(QuotaProgressBar, {
+  //         percent,
+  //         highThreshold: QUOTA_PROGRESS_HIGH_THRESHOLD,
+  //         mediumThreshold: QUOTA_PROGRESS_MEDIUM_THRESHOLD,
+  //       })
+  //     )
+  //   );
+  // }
 
   if (nodes.length === 0) {
     return h('div', { className: styleMap.quotaMessage }, t('kiro_quota.empty'));
