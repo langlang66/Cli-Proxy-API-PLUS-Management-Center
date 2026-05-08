@@ -301,6 +301,8 @@
   padding-top: $spacing-sm;
   margin-top: $spacing-xs;
   border-top: 1px dashed var(--border-color);
+  min-height: 120px;
+  justify-content: center;
 }
 
 .quotaRow {
