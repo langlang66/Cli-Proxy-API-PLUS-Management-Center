@@ -13,7 +13,7 @@ This is an **enhanced fork** of [router-for-me/Cli-Proxy-API-Management-Center](
 ### Kiro (AWS CodeWhisperer) Quota Display
 - View Kiro quota information on the Quota Management page
 - Support quota refresh on Auth Files page
-- Display base quota and free trial quota
+- Display base quota and active free trial quota (expired trials are hidden)
 - Reset time formatted as M/D HH:MM
 
 ### GitHub Copilot Quota Display
