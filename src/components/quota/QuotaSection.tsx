@@ -237,12 +237,51 @@ export function QuotaSection<TState extends QuotaStatusState, TData>({
     [config, disabled, quota, setQuota, showNotification, t]
   );
 
+  // 计算所有 Kiro 文件的总额度
+  const totalQuotaInfo = useMemo(() => {
+    if (config.type !== 'kiro') return null;
+    
+    let totalUsed = 0;
+    let totalLimit = 0;
+    let hasData = false;
+
+    filteredFiles.forEach((file) => {
+      const fileQuota = quota[file.name];
+      if (fileQuota?.status !== 'success') return;
+      
+      const data = fileQuota as any;
+      if (data.baseQuota) {
+        totalUsed += data.baseQuota.used;
+        totalLimit += data.baseQuota.limit;
+        hasData = true;
+      }
+      
+      if (data.freeTrialQuota && data.freeTrialQuota.status?.toUpperCase() === 'ACTIVE') {
+        totalUsed += data.freeTrialQuota.used;
+        totalLimit += data.freeTrialQuota.limit;
+        hasData = true;
+      }
+    });
+
+    if (!hasData || totalLimit === 0) return null;
+    
+    const totalRemaining = Math.max(0, totalLimit - totalUsed);
+    const totalPercent = Math.round((totalRemaining / totalLimit) * 100);
+    
+    return { totalRemaining, totalLimit, totalPercent };
+  }, [config.type, filteredFiles, quota]);
+
   const titleNode = (
     <div className={styles.titleWrapper}>
       <span>{t(`${config.i18nPrefix}.title`)}</span>
       {filteredFiles.length > 0 && (
         <span className={styles.countBadge}>
           {filteredFiles.length}
+        </span>
+      )}
+      {totalQuotaInfo && (
+        <span className={styles.totalQuotaBadge}>
+          {t('kiro_quota.total_quota')}: {totalQuotaInfo.totalRemaining.toFixed(1)}/{totalQuotaInfo.totalLimit.toFixed(1)} ({totalQuotaInfo.totalPercent}%)
         </span>
       )}
     </div>

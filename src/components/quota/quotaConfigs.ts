@@ -1477,52 +1477,6 @@ const renderKiroItems = (
     );
   }
 
-  // 计算总额度（基础配额 + 激活状态的免费试用配额）
-  let totalUsed = 0;
-  let totalLimit = 0;
-  let hasQuota = false;
-
-  if (quota.baseQuota) {
-    totalUsed += quota.baseQuota.used;
-    totalLimit += quota.baseQuota.limit;
-    hasQuota = true;
-  }
-
-  if (quota.freeTrialQuota && quota.freeTrialQuota.status.toUpperCase() === 'ACTIVE') {
-    totalUsed += quota.freeTrialQuota.used;
-    totalLimit += quota.freeTrialQuota.limit;
-    hasQuota = true;
-  }
-
-  // 显示总额度进度条
-  if (hasQuota && totalLimit > 0) {
-    const totalRemaining = Math.max(0, totalLimit - totalUsed);
-    const totalPercent = Math.round((totalRemaining / totalLimit) * 100);
-
-    nodes.push(
-      h(
-        'div',
-        { key: 'total', className: styleMap.quotaRow },
-        h(
-          'div',
-          { className: styleMap.quotaRowHeader },
-          h('span', { className: styleMap.quotaModel }, t('kiro_quota.total_quota')),
-          h(
-            'div',
-            { className: styleMap.quotaMeta },
-            h('span', { className: styleMap.quotaPercent }, `${totalPercent}%`),
-            h('span', { className: styleMap.quotaAmount }, `${totalRemaining.toFixed(1)}/${totalLimit.toFixed(1)}`)
-          )
-        ),
-        h(QuotaProgressBar, {
-          percent: totalPercent,
-          highThreshold: QUOTA_PROGRESS_HIGH_THRESHOLD,
-          mediumThreshold: QUOTA_PROGRESS_MEDIUM_THRESHOLD,
-        })
-      )
-    );
-  }
-
   if (quota.baseQuota) {
     const { used, limit, resetTime } = quota.baseQuota;
     const remaining = Math.max(0, limit - used);
