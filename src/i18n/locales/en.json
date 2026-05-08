@@ -726,6 +726,7 @@
     "refresh_button": "Refresh Quota",
     "fetch_all": "Fetch All",
     "subscription_label": "Subscription",
+    "total_quota": "Total Quota",
     "base_quota": "Base Quota",
     "free_trial": "Free Trial",
     "trial_active": "Active",

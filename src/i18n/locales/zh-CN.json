@@ -726,6 +726,7 @@
     "refresh_button": "刷新额度",
     "fetch_all": "获取全部",
     "subscription_label": "订阅类型",
+    "total_quota": "总额度",
     "base_quota": "基础额度",
     "free_trial": "免费试用",
     "trial_active": "试用中",
